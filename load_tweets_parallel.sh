@@ -16,6 +16,12 @@ echo '==========================================================================
 echo 'load pg_denormalized'
 echo '================================================================================'
 # FIXME: copy your solution to the previous problem here
+#time echo "$files" | parallel ./load_denormalized.sh
+time for file in $files; do
+    echo
+    # copy your solution to the twitter_postgres assignment here
+    unzip -p $file | sed 's/\\u0000//g' | psql postgresql://postgres:pass@localhost:10255 -c "COPY tweets_jsonb (data) FROM STDIN csv quote e'\x01' delimiter e'\x02';"
+done
 
 # NOTE:
 # I have removed the pg_normalized code from this repo.
@@ -27,3 +33,4 @@ echo '==========================================================================
 echo 'load pg_normalized_batch'
 echo '================================================================================'
 # FIXME: copy your solution to the previous problem here
+#time echo "$files" | parallel python3 -u load_tweets_batch.py --db=postgresql://postgres:pass@localhost:10256/ --inputs
